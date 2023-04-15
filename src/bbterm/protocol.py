@@ -1,10 +1,10 @@
 from io import IOBase
 from typing import List, Callable, Tuple, Optional
 from PyQt5.QtGui import QPixmap
-from canvas import Canvas
-from errors import ProtocolError
-from font import SIZE
-from extensions import extensions
+from .canvas import Canvas
+from .errors import ProtocolError
+from .font import SIZE
+from bbterm.extensions import extensions
 
 
 class ClientProtocol:

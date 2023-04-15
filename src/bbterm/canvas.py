@@ -1,8 +1,8 @@
 from typing import Optional, Dict
 from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QPixmap, QPainter, QImage, QColor
-from font import Font, create_font
-from inline_font import SIZE
+from .font import Font, create_font
+from .inline_font import SIZE
 
 
 class Canvas:

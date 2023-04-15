@@ -1,7 +1,7 @@
 import numpy as np
 from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QImage
-from inline_font import SIZE, load_font
+from .inline_font import SIZE, load_font
 
 
 # from .canvas import Canvas

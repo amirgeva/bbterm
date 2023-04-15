@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bbterm"
+version = "0.0.4"
+authors = [
+  { name="Amir Geva", email="amirgeva@gmail.com" },
+]
+description = "BBS Terminal"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+  'PyQt5',
+  'numpy',
+  'argh'
+]
+
+[project.urls]
+"Homepage" = "https://github.com/amirgeva/bbterm"
+"Bug Tracker" = "https://github.com/amirgeva/bbterm/issues"
+
+[project.scripts]
+bbterm = "bbterm.main:main"

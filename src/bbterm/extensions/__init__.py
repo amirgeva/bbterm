@@ -7,7 +7,7 @@ def scan_extensions():
              f.endswith('.py') and not f.startswith('__')]
 
     for name in names:
-        m = importlib.import_module(name, '.extensions')
+        m = importlib.import_module(name, 'bbterm.extensions')
         for sub in dir(m):
             if sub.endswith('Extension'):
                 extensions.append(getattr(m, sub))

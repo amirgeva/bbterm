@@ -4,10 +4,10 @@ from typing import Optional
 from PyQt5.QtCore import QTimer, QSize, Qt
 from PyQt5.QtGui import QPaintEvent, QPainter, QResizeEvent, QKeyEvent
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
-from canvas import Canvas
-from font import SIZE
-from protocol import ClientProtocol
-from telnet_client import TelnetClient
+from .canvas import Canvas
+from .font import SIZE
+from .protocol import ClientProtocol
+from .telnet_client import TelnetClient
 
 key_map = {
     Qt.Key_Return: b'\r\x00',
@@ -105,5 +105,9 @@ def run_terminal(host: str, port: str):
         print("Invalid port number")
 
 
-if __name__ == '__main__':
+def main():
     argh.dispatch_command(run_terminal)
+
+
+if __name__ == '__main__':
+    main()

@@ -1,7 +1,7 @@
 from typing import Dict
 from PyQt5.QtGui import QImage
-from errors import ProtocolError
-from font import SIZE
+from .errors import ProtocolError
+from .font import SIZE
 
 
 def rgb_to_argb(data: bytes) -> bytes:

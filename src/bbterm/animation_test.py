@@ -2,7 +2,7 @@ import sys
 import time
 import io
 from PyQt5.QtWidgets import QApplication
-from main import MainWindow
+from .main import MainWindow
 
 
 class AnimationTest(io.IOBase):
