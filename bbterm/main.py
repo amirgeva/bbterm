@@ -1,5 +1,8 @@
+import socket
 import sys
+import time
 import argh
+import threading
 from typing import Optional
 from PyQt5.QtCore import QTimer, QSize, Qt
 from PyQt5.QtGui import QPaintEvent, QPainter, QResizeEvent, QKeyEvent
@@ -8,6 +11,7 @@ from .canvas import Canvas
 from .font import SIZE
 from .protocol import ClientProtocol
 from .telnet_client import TelnetClient
+from server import Server
 
 key_map = {
     Qt.Key_Return: b'\r\x00',
@@ -24,6 +28,26 @@ key_map = {
     Qt.Key_Home: b'\x1b[H',
     Qt.Key_End: b'\x1b[F'
 }
+
+terminating = False
+
+
+def run_server(server: Server, port: int):
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind(('', port))
+    server_socket.listen()
+    sock, addr = server_socket.accept()
+    sock.settimeout(0.1)
+    while not terminating:
+        try:
+            incoming = sock.recv(256)
+            server.handle_incoming(incoming)
+        except socket.timeout:
+            pass
+        server.process(sock)
+    sock.shutdown(socket.SHUT_RDWR)
+    sock.close()
+    server_socket.close()
 
 
 class CanvasWidget(QWidget):
@@ -91,8 +115,14 @@ class MainWindow(QMainWindow):
             self._io.write(text)
 
 
-def run_terminal(host: str, port: str):
+def run_terminal(host: str, port: str, local_server: Optional[Server] = None):
     try:
+        server_thread: Optional[threading.Thread] = None
+        if local_server is not None:
+            host = 'localhost'
+            server_thread = threading.Thread(target=run_server, args=[local_server, int(port)])
+            server_thread.start()
+            time.sleep(1.0)
         client = TelnetClient(host, int(port))
         if client.connect():
             app = QApplication(sys.argv)
@@ -101,6 +131,10 @@ def run_terminal(host: str, port: str):
             app.exec_()
         else:
             print("Failed to connect")
+        if server_thread:
+            global terminating
+            terminating = True
+            server_thread.join()
     except ValueError:
         print("Invalid port number")
 

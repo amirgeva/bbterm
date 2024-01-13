@@ -39,7 +39,7 @@ class Canvas:
 
     def valid_cursor(self, cursor):
         font = self._fonts[self._cur_font]
-        return 0 <= cursor[1] < font.bottom_most() and 0 <= cursor[0] < font.right_most()
+        return 0 <= cursor[1] <= font.bottom_most() and 0 <= cursor[0] <= font.right_most()
 
     def get_cursor(self):
         return self._cursor
