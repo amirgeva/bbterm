@@ -102,7 +102,7 @@ class AnsiExtension:
     def get_escape_pattern():
         return '['
 
-    def process(self, canvas: Canvas, data: bytearray, i: int):
+    def process(self, canvas: Canvas, data: bytearray, i: int, io=None):
         n = len(data)
         for j in range(i + 2, n):
             code = chr(data[j])
@@ -112,6 +112,14 @@ class AnsiExtension:
                     sub = data[(i + 2):j]
                     text = sub.decode('ascii')
                     function(canvas, text)
-                    return j + 1
-                raise RuntimeError("Invalid ANSI code")
+                elif code == 'n' and io is not None:
+                    sub = data[(i + 2):j].decode('ascii')
+                    if sub == '6':
+                        cursor = canvas.get_cursor()
+                        row = cursor[1] // SIZE + 1
+                        col = cursor[0] // SIZE + 1
+                        io.write(f'\x1b[{row};{col}R'.encode('ascii'))
+                elif code == 'c' and io is not None:
+                    io.write(b'\x1b[?1;0c')
+                return j + 1
         return i

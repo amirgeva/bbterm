@@ -16,7 +16,7 @@ class Canvas:
         self._fonts: Dict[int, Font] = {0: create_font(self)}
         self._cur_font = 0
         self._blink_count = 0
-        self._blink = False
+        self._blink = True
 
     def get_font(self) -> Font:
         return self._fonts[self._cur_font]

@@ -40,7 +40,7 @@ class ClientProtocol:
                     escape_character = self._data[i + 1]
                     if escape_character in self._processors:
                         processor: Callable[[Canvas, bytearray, int], int] = self._processors[escape_character]
-                        j = processor(self._canvas, self._data, i)
+                        j = processor(self._canvas, self._data, i, self._io)
                         if j > i:
                             i = j
                             res = True
@@ -62,7 +62,18 @@ class ClientProtocol:
         return res
 
     def _handle_char(self, ch: int):
-        if ch == 13:
+        if ch == 8:
+            cursor = self._canvas.get_cursor()
+            x = cursor[0] - SIZE
+            y = cursor[1]
+            if x < 0:
+                x = self._canvas.get_font().right_most()
+                y -= SIZE
+                if y < 0:
+                    y = 0
+                    x = 0
+            self._canvas.set_cursor((x, y))
+        elif ch == 13:
             self._canvas.set_cursor((0, self._canvas.get_cursor()[1] + SIZE))
         elif ch >= 32:
             self._draw_char(ch)

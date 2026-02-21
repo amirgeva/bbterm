@@ -53,7 +53,7 @@ class SlashExtension:
     def get_escape_pattern():
         return '/'
 
-    def process(self, canvas: Canvas, data: bytearray, i: int):
+    def process(self, canvas: Canvas, data: bytearray, i: int, io=None):
         n = len(data)
         if i < (n - 4):
             code = chr(data[i + 2])

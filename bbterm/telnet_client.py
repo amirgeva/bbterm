@@ -1,6 +1,9 @@
 import socket
 import time
 
+# Set to True to dump all received data to dump.bin for debugging purposes.
+# This is not intended for regular use and may cause performance issues.
+diagnostic_dump = False
 
 class TelnetClient:
     def __init__(self, host: str, port: int):
@@ -32,6 +35,10 @@ class TelnetClient:
     def read(self, size: int) -> bytes:
         # Return what's available
         try:
-            return self._socket.recv(size)
+            data = self._socket.recv(size)
+            if data and diagnostic_dump:
+                with open('dump.bin', 'ab') as f:
+                    f.write(data)
+            return data
         except BlockingIOError:
             return bytes()
